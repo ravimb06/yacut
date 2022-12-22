@@ -1,0 +1,62 @@
+{% extends "base.html" %} 
+{% block content %}
+<main>
+    <section class="container my-5 px-4">
+      <h1 class="text-center"><span style="color:red">Ya</span>Cut</h1>
+      <p class="text-center my-4">
+        Создайте короткую ссылку автоматически или предложите свой вариант
+      </p>
+
+      <div class="container">
+        <div class="row my-3">
+          <div class="col-sm">
+          </div>
+          <div class="col-sm">
+            <form method="POST" novalidate>
+                {{ form.csrf_token }}
+                {{ form.original(class="form-control form-control-lg py-3 mb-3", placeholder=form.original.label.text) }}
+                <p>
+                  {% if form.original.errors %}
+                    {% for error in form.original.errors %}
+                      <span style="color: red">{{ error }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </p>
+                {{ form.short(class="form-control form-control-lg py-3 mb-3", placeholder=form.short.label.text, rows="3", cols="40")}}
+                <p class="text-danger">
+                  {% if form.short.errors %}
+                    {% for error in form.short.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  {% endif %}
+                </p>
+                {{ form.submit(class="btn btn-primary") }}
+              </form>
+          </div>
+          <div class="col-sm">
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row ">
+          <div class="col-sm">
+          </div>
+          <div class="col-sm">
+            {% if short %}
+              <p class="text-center">
+                <h6 class="text-center">Ваша новая ссылка готова:</h6>
+                <a href={{ short }}>
+                    <h6 class="text-center">{{ short }}</h6>
+                </a>
+              </p>
+            {% endif %}
+          </div>
+          <div class="col-sm">
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+{% endblock %}
