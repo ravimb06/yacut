@@ -10,6 +10,6 @@ class URLMapForm(FlaskForm):
     )
     short = StringField(
         'Ваш вариант короткой ссылки',
-        validators=[Length(1, 16), Optional]
+        validators=[Length(1, 16), Optional()]
     )
     submit = SubmitField('Создать')
