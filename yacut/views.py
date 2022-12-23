@@ -1,7 +1,8 @@
 from random import randrange, choice
 from string import ascii_letters
+import re
 
-from flask import abort, flash, redirect, render_template, url_for
+from flask import flash, render_template, url_for
 
 from . import app, db
 from .forms import URLMapForm
@@ -14,6 +15,7 @@ def get_unique_short_id():
     )
     return rand_string
 
+
 @app.route('/', methods=['GET', 'POST'])
 def add_urlmap_view():
     form = URLMapForm()
@@ -21,8 +23,11 @@ def add_urlmap_view():
         short = form.short.data
         if not short:
             short = get_unique_short_id()
+        if not re.match("""^[a-zA-Z0-9]+$""", short):
+            flash('Введены недопустимые символы!')
+            return render_template('index.html', form=form)
         if URLMap.query.filter_by(short=short).first():
-            flash('Такая ссылка уже существует!')
+            flash(f'Имя {short} уже занято!')
             return render_template('index.html', form=form)
         urlmap = URLMap(
             original=form.original.data,

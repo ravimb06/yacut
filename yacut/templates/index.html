@@ -32,6 +32,16 @@
                 </p>
                 {{ form.submit(class="btn btn-primary") }}
               </form>
+            <p class="py-3 mb-3">
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    {% for message in messages %}
+                      <span style="color: red">{{ message }}</span>
+                      {{ category }}
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </p>
           </div>
           <div class="col-sm">
           </div>
@@ -46,7 +56,7 @@
             {% if short %}
               <p class="text-center">
                 <h6 class="text-center">Ваша новая ссылка готова:</h6>
-                <a href={{ short }}>
+                <a href={{ form.original.data }}>
                     <h6 class="text-center">{{ short }}</h6>
                 </a>
               </p>
