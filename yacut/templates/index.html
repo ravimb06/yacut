@@ -14,18 +14,18 @@
           <div class="col-sm">
             <form method="POST" novalidate>
                 {{ form.csrf_token }}
-                {{ form.original(class="form-control form-control-lg py-3 mb-3", placeholder=form.original.label.text) }}
+                {{ form.original_link(class="form-control form-control-lg py-3 mb-3", placeholder=form.original_link.label.text) }}
                 <p>
-                  {% if form.original.errors %}
-                    {% for error in form.original.errors %}
+                  {% if form.original_link.errors %}
+                    {% for error in form.original_link.errors %}
                       <span style="color: red">{{ error }}</span>
                     {% endfor %}
                   {% endif %}
                 </p>
-                {{ form.short(class="form-control form-control-lg py-3 mb-3", placeholder=form.short.label.text, rows="3", cols="40")}}
+                {{ form.custom_id(class="form-control form-control-lg py-3 mb-3", placeholder=form.custom_id.label.text, rows="3", cols="40")}}
                 <p class="text-danger">
-                  {% if form.short.errors %}
-                    {% for error in form.short.errors %}
+                  {% if form.custom_id.errors %}
+                    {% for error in form.custom_id.errors %}
                       {{ error }}
                     {% endfor %}
                   {% endif %}
@@ -56,7 +56,7 @@
             {% if short %}
               <p class="text-center">
                 <h6 class="text-center">Ваша новая ссылка готова:</h6>
-                <a href={{ form.original.data }}>
+                <a href="{{ short }}">
                     <h6 class="text-center">{{ short }}</h6>
                 </a>
               </p>
