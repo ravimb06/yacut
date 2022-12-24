@@ -1,6 +1,4 @@
-import re
-
-from flask import flash, render_template, url_for
+from flask import abort, flash, redirect, render_template, url_for
 
 from . import app, db
 from .forms import URLMapForm
@@ -23,10 +21,18 @@ def add_urlmap_view():
             return render_template('index.html', form=form)
         urlmap = URLMap(
             original=form.original_link.data,
-            short=form.custom_id.data,
+            short=short,
         )
         db.session.add(urlmap)
         db.session.commit()
         full_link = url_for('add_urlmap_view', _external=True) + short
         return render_template('index.html', form=form, short=full_link)
     return render_template('index.html', form=form)
+
+
+@app.route('/<short_id>')
+def redirect_to_original_link(short_id):
+    urlmap = URLMap.query.filter_by(short=short_id).first()
+    if urlmap is None:
+        abort(404)
+    return redirect(urlmap.original)
