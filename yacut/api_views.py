@@ -11,22 +11,24 @@ def get_original_url(short_id):
     urlmap = URLMap.query.filter_by(short=short_id).first()
     if urlmap is None:
         raise InvalidAPIUsage('Указанный id не найден', 404)
-    return jsonify({'url': urlmap.to_dict()['original']}), 200
+    return jsonify({'url': urlmap.to_dict()['url']}), 200
 
 
 @app.route('/api/id/', methods=['POST'])
 def add_urlmap():
     data = request.get_json()
-    if 'short' not in data:
-        data['short'] = get_unique_short_id()
-    if not char_validator(data['short']):
+    if not data:
+        raise InvalidAPIUsage('Отсутствует тело запроса')
+    if 'custom_id' not in data or not data['custom_id']:
+        data['custom_id'] = get_unique_short_id()
+    if not char_validator(data['custom_id']):
         raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
-    if 'original' not in data:
-        raise InvalidAPIUsage('В запросе отсутствует оригинальная ссылка')
-    if URLMap.query.filter_by(short=data['short']).first() is not None:
-        raise InvalidAPIUsage('Такая короткая ссылка уже существует!')
+    if 'url' not in data:
+        raise InvalidAPIUsage('"url" является обязательным полем!')
+    if URLMap.query.filter_by(short=data['custom_id']).first() is not None:
+        raise InvalidAPIUsage(f'Имя "{data["custom_id"]}" уже занято.')
     urlmap = URLMap()
     urlmap.from_dict(data)
     db.session.add(urlmap)
     db.session.commit()
-    return jsonify({'urlmap': urlmap.to_dict()}), 201
+    return jsonify(urlmap.to_dict()), 201
