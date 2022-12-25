@@ -1,11 +1,11 @@
 import re
-from random import choice, randrange
-from string import ascii_letters
+from random import choice
+from string import ascii_letters, digits
 
 
 def get_unique_short_id():
     rand_string = ''.join(
-        choice(ascii_letters) + str(randrange(9)) for i in range(3)
+        choice(ascii_letters) + choice(digits) for i in range(3)
     )
     return rand_string
 
